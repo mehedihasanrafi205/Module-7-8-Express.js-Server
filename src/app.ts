@@ -7,14 +7,15 @@ import express, {
 import { Pool } from "pg";
 import config from "./config";
 import { initDB, pool } from "./db";
-const app: Application = express();
+import { userRoute } from "./modules/user/user.route";
 
+const app: Application = express();
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
-
+app.use('/api/users',userRoute)
 
 
 app.get("/", (req: Request, res: Response) => {
@@ -24,34 +25,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.post("/api/users", async (req: Request, res: Response) => {
-  // console.log(req.body);
 
-  const { name, email, password, age } = req.body;
-
-  try {
-    const result = await pool.query(
-      `
-    INSERT INTO users(name, email, password, age) VALUES ($1,$2,$3,$4) RETURNING *
-    `,
-      [name, email, password, age],
-    );
-
-    // console.log(result);
-
-    res.status(201).json({
-      success: true,
-      message: "User Created Successfully",
-      data: result.rows[0],
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      error: error,
-    });
-  }
-});
 
 app.get("/api/users", async (req: Request, res: Response) => {
   try {
