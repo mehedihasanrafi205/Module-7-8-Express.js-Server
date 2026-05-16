@@ -8,15 +8,13 @@ import { Pool } from "pg";
 import config from "./config";
 import { initDB, pool } from "./db";
 import { userRoute } from "./modules/user/user.route";
+import { ProfileRoute } from "./modules/profile/profile.route";
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
-
-
-
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
@@ -25,11 +23,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.use('/api/users',userRoute)
+app.use("/api/users", userRoute);
+app.use("/api/profile", ProfileRoute);
 
-
-
-
-export default app
-
-
+export default app;
